@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "repo": "PCBA_Solar_MPPT_Controller",
+  "board_id": "solar_mppt_controller",
+  "benchmark_id": 20,
+  "title": "Solar MPPT Battery Charger",
+  "description": "The split between what BRIEF.md fixes and what it leaves open. Every fixed_requirements entry carries the verbatim brief text that substantiates it, bound to the recorded brief digest. An open_decisions entry is a choice for the design agent: record it in 'chosen' with 'rationale', and never move it into fixed_requirements. Missing details are design freedom, not permission to fabricate unstated user requirements.",
+  "brief": {
+    "path": "../BRIEF.md",
+    "sha256": "d62213d57c66897eb6756f8d70a4fdc41221aed55d7afc257cbc82ba56b40d05",
+    "authority": "supplied by the benchmark; authoritative; preserved byte for byte and never edited"
+  },
+  "metadata": {
+    "category": "power-energy",
+    "difficulty": 4,
+    "detail": 2,
+    "layers": "4",
+    "stressors": [
+      "buck power stage",
+      "current sensing",
+      "wide voltage range",
+      "thermal"
+    ]
+  },
+  "derivation": {
+    "method": "BRIEF.md was read and split; no design decision was taken. Every fixed_requirements entry, and every spec-table row sourced from the brief, carries a quotation that was checked by literal substring match against the brief bytes digested above. The build refuses to emit this file if any quotation is not found.",
+    "quotations_verified": 23,
+    "review": "two rounds of adversarial review against the brief, looking for invented requirements, lost requirements, evidence supporting a weaker claim than the one made beside it, and worksheet questions that presuppose their own answer"
+  },
+  "fixed_requirements": [
+    {
+      "id": "REQ-01",
+      "requirement": "The board is an MPPT solar charger — maximum power point tracking is a required function, not an optional mode.",
+      "brief_evidence": "Design an MPPT solar charger for a nominal 12 V photovoltaic panel"
+    },
+    {
+      "id": "REQ-02",
+      "requirement": "The input source is a nominal 12 V photovoltaic panel.",
+      "brief_evidence": "for a nominal 12 V photovoltaic panel charging a 3S or 4S lithium battery pack"
+    },
+    {
+      "id": "REQ-03",
+      "requirement": "The output is a lithium battery pack in a 3S or 4S configuration. The brief names both and narrows to neither, so the chemistry class and the two candidate pack configurations are fixed, while which configuration(s) a given board serves — and how that is established — is the design agent's decision to make and record (OPEN-05).",
+      "brief_evidence": "charging a 3S or 4S lithium battery pack at up to roughly 5 A."
+    },
+    {
+      "id": "REQ-04",
+      "requirement": "The charger must handle charge current up to roughly 5 A into the pack. This is a stated ceiling on the charge current; the brief states no duty cycle, no continuity, and no current figure for the panel side.",
+      "brief_evidence": "lithium battery pack at up to roughly 5 A. Include input/output current and voltage measurement"
+    },
+    {
+      "id": "REQ-05",
+      "requirement": "Current measurement is required on both the input (panel) side and the output (battery) side.",
+      "brief_evidence": "Include input/output current and voltage measurement, an MCU, protected battery and panel connectors"
+    },
+    {
+      "id": "REQ-06",
+      "requirement": "Voltage measurement is required on both the input (panel) side and the output (battery) side.",
+      "brief_evidence": "Include input/output current and voltage measurement, an MCU, protected battery and panel connectors"
+    },
+    {
+      "id": "REQ-07",
+      "requirement": "The board must include an MCU.",
+      "brief_evidence": "current and voltage measurement, an MCU, protected battery and panel connectors, and a communications/debug port."
+    },
+    {
+      "id": "REQ-08",
+      "requirement": "Both the battery connector and the panel connector must be protected; protection is a stated requirement on the connector interfaces. The brief says \"connectors\" and names no connector style, family or part.",
+      "brief_evidence": "an MCU, protected battery and panel connectors, and a communications/debug port."
+    },
+    {
+      "id": "REQ-09",
+      "requirement": "The board must include a communications/debug port.",
+      "brief_evidence": "protected battery and panel connectors, and a communications/debug port. Choose the exact MPPT power topology"
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "The design agent is required to select and pin down the MPPT power topology and the controller implementation — the choice is delegated but making and recording it is mandatory.",
+      "brief_evidence": "Choose the exact MPPT power topology and controller implementation."
+    },
+    {
+      "id": "REQ-11",
+      "requirement": "The brief states the areas the benchmark should stress: high-current routing, analog current sensing, switching-loop layout, thermal management, and placement around bulky connectors/inductors. The design is expected to engage those areas as the brief's stated intent for this board; the sentence names areas of stress, not a prohibition on any particular design choice.",
+      "brief_evidence": "The benchmark should stress high-current routing, analog current sensing, switching-loop layout, thermal management, and placement around bulky connectors/inductors."
+    },
+    {
+      "id": "REQ-12",
+      "requirement": "Where the brief leaves a choice open, the design agent must make and document a reasonable engineering decision rather than invent an unstated user requirement to justify it.",
+      "brief_evidence": "Treat stated requirements as authoritative; where the brief leaves choices open, make and document reasonable engineering decisions"
+    },
+    {
+      "id": "REQ-13",
+      "requirement": "This repository must remain a consumer of the shared PCBA_AutoDesignAndTest toolkit; board-specific logic belongs here, not in the toolkit.",
+      "brief_evidence": "The repository should remain a consumer of the shared `PCBA_AutoDesignAndTest` toolkit rather than accumulating board-specific logic in the toolkit."
+    }
+  ],
+  "open_decisions": [
+    {
+      "id": "OPEN-01",
+      "decision": "The MPPT power converter topology.",
+      "why_open": "The brief explicitly delegates it (\"Choose the exact MPPT power topology\"). The metadata tags \"buck power stage\" as a stressor, but that is a benchmark stress label, not a stated user requirement — the topology decision and its justification are the design agent's.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-02",
+      "decision": "Where the MPPT control loop lives and what algorithm it uses — MCU firmware, a dedicated controller, or a split between them.",
+      "why_open": "The brief says to choose the controller implementation and requires an MCU, but never says the MCU runs the tracking loop and names no algorithm.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-03",
+      "decision": "MCU selection: family, core, package, peripheral set, and ADC capability.",
+      "why_open": "The brief requires \"an MCU\" and stops there. No architecture, vendor, speed, memory, or pin count is stated.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-04",
+      "decision": "The panel-side operating window the board is designed to: open-circuit voltage ceiling, short-circuit current, minimum tracking voltage, and behaviour outside that window.",
+      "why_open": "The brief gives only \"nominal 12 V\" for the panel — a nominal rating, not a range — while the metadata names \"wide voltage range\" as a stressor. The actual design limits are a derived, documented decision.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-05",
+      "decision": "Which pack configuration the board serves — 3S, 4S, or both — and, if both, how the case is configured, detected, or selected; and the battery charge profile and limits: how charging is regulated and terminated, and the per-cell voltage limits enforced.",
+      "why_open": "The brief writes \"a 3S or 4S lithium battery pack\" as a disjunction and never says one board must cover both. It states no chemistry variant, cell voltage, charge stages, or configuration mechanism, and this choice drives the output voltage range and therefore the required conversion direction.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-06",
+      "decision": "Current-sense method and topology for each of the two measurement points — sense element type (resistive, magnetic, DCR, sense-FET, or integrated in the converter), its placement in the current path, and the signal-conditioning chain into the ADC.",
+      "why_open": "The brief requires input and output current measurement and calls the area \"analog current sensing\", but names no sense element and does not say how or where in the loop the measurement is taken.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-07",
+      "decision": "Accuracy, resolution, bandwidth, and calibration strategy for the current and voltage measurements.",
+      "why_open": "The brief is silent on measurement performance; no tolerance, error budget, or update rate appears anywhere in it.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-08",
+      "decision": "Voltage-sense implementation on both rails — divider ratios, reference source, and how the sense nodes tolerate the full operating window.",
+      "why_open": "The brief requires the measurement to exist but fixes no ranges, references, or input-protection approach for it.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-09",
+      "decision": "What the connector \"protection\" covers — which fault and stress modes are in scope, on which port, and by what mechanism.",
+      "why_open": "The brief requires \"protected battery and panel connectors\" but names neither the threats being protected against nor any protective device. Converting the word into a specific protection part would be fabricating a requirement.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-10",
+      "decision": "Panel and battery connector selection: type, current rating, wire termination, polarity keying, and retention.",
+      "why_open": "The brief names no connector family, style or part, only that these connectors exist and are protected — while also calling out placement around bulky connectors as a stress area.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-11",
+      "decision": "The communications/debug port's electrical interface, protocol, connector, and whether it also serves as the programming interface.",
+      "why_open": "The brief writes \"a communications/debug port\" as a single item and names no interface standard, connector, or protocol.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-12",
+      "decision": "Switching frequency, inductor and switching-device selection, ripple targets, and efficiency targets.",
+      "why_open": "The brief states none of these; they follow from the topology decision, which is itself delegated.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-13",
+      "decision": "Housekeeping/bias supply architecture — how the MCU and analog rails are generated, from which source (panel, battery, the debug port, or a combination), and start-up behaviour when the panel is dark or the battery is deeply discharged.",
+      "why_open": "The brief is silent on internal rails, rail voltages, and start-up or sequencing behaviour, and it does not say which of the board's interfaces may act as a supply.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-14",
+      "decision": "Thermal strategy: the worst-case dissipation the board is designed to, ambient assumptions, allowed temperature rise, and by what path heat leaves the assembly.",
+      "why_open": "The brief names thermal management as an area to stress but states no ambient, rise limit, airflow condition, heatsinking, or mounting arrangement, and prescribes no heat-removal mechanism.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-15",
+      "decision": "Board outline, dimensions, mounting-hole pattern, keepouts, and connector edge locations.",
+      "why_open": "The brief states no mechanical envelope, enclosure, or mounting requirement at all.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-16",
+      "decision": "Stackup specifics: whether the likely 4 layers are used, layer roles, copper weights, dielectric thicknesses, and finished board thickness.",
+      "why_open": "The metadata offers \"4\" as a likely layer count only. Copper weight in particular is a live decision because the board must carry the roughly 5 A charge current on the battery side plus whatever panel-side current the chosen topology and operating point imply, and nothing in the brief fixes either the conductor sizing or the duty over which that current flows.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-17",
+      "decision": "Ground and return-path strategy: how the power-stage return, the sense returns, and the MCU/analog reference are partitioned and joined.",
+      "why_open": "The brief pairs high-current routing with analog current sensing as stressors but prescribes no grounding scheme.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-18",
+      "decision": "Fabrication and assembly constraints: fabricator, design-rule class, single- versus double-sided assembly, and any resulting placement restrictions.",
+      "why_open": "The brief names no manufacturer, process, or DFM ruleset.",
+      "chosen": null,
+      "rationale": null
+    },
+    {
+      "id": "OPEN-19",
+      "decision": "Bring-up and test provisions: test points, in-circuit access to the switching node and sense chain, and any status indicators.",
+      "why_open": "The brief mentions only a communications/debug port and says nothing about physical test access, instrumentation points, or user-visible status.",
+      "chosen": null,
+      "rationale": null
+    }
+  ]
+}
