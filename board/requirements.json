@@ -25,6 +25,7 @@
   "derivation": {
     "method": "BRIEF.md was read and split; no design decision was taken. Every fixed_requirements entry, and every spec-table row sourced from the brief, carries a quotation that was checked by literal substring match against the brief bytes digested above. The build refuses to emit this file if any quotation is not found.",
     "quotations_verified": 23,
+    "where_the_quotations_are": "Every one of them is in this file: fixed_requirements[].brief_evidence and brief_spec_rows[].brief_evidence. The count above is the sum of those two lists, so it is recomputable from this repository alone - re-read BRIEF.md and check each string is a substring of it. brief_spec_rows carries the quotations behind the README's spec table, which would otherwise cite the brief with the evidence left in a build script.",
     "review": "two rounds of adversarial review against the brief, looking for invented requirements, lost requirements, evidence supporting a weaker claim than the one made beside it, and worksheet questions that presuppose their own answer"
   },
   "fixed_requirements": [
@@ -92,6 +93,58 @@
       "id": "REQ-13",
       "requirement": "This repository must remain a consumer of the shared PCBA_AutoDesignAndTest toolkit; board-specific logic belongs here, not in the toolkit.",
       "brief_evidence": "The repository should remain a consumer of the shared `PCBA_AutoDesignAndTest` toolkit rather than accumulating board-specific logic in the toolkit."
+    }
+  ],
+  "brief_spec_rows": [
+    {
+      "aspect": "Function",
+      "value": "MPPT solar charger (panel to battery)",
+      "brief_evidence": "Design an MPPT solar charger for a nominal 12 V photovoltaic panel"
+    },
+    {
+      "aspect": "Input source",
+      "value": "Nominal 12 V photovoltaic panel",
+      "brief_evidence": "for a nominal 12 V photovoltaic panel charging a 3S or 4S lithium battery pack"
+    },
+    {
+      "aspect": "Battery pack",
+      "value": "A 3S or 4S lithium battery pack — the brief names both configurations and narrows to neither",
+      "brief_evidence": "charging a 3S or 4S lithium battery pack at up to roughly 5 A."
+    },
+    {
+      "aspect": "Charge current",
+      "value": "Up to roughly 5 A into the pack (a ceiling; no duty cycle or continuity stated)",
+      "brief_evidence": "lithium battery pack at up to roughly 5 A. Include input/output current and voltage measurement"
+    },
+    {
+      "aspect": "Instrumentation",
+      "value": "Input and output current measurement, and input and output voltage measurement",
+      "brief_evidence": "Include input/output current and voltage measurement, an MCU, protected battery and panel connectors"
+    },
+    {
+      "aspect": "Digital control",
+      "value": "An MCU on board (part and family not fixed)",
+      "brief_evidence": "current and voltage measurement, an MCU, protected battery and panel connectors, and a communications/debug port."
+    },
+    {
+      "aspect": "Power connectors",
+      "value": "Protected battery connector and protected panel connector",
+      "brief_evidence": "an MCU, protected battery and panel connectors, and a communications/debug port."
+    },
+    {
+      "aspect": "Comms/debug",
+      "value": "A communications/debug port (interface not named)",
+      "brief_evidence": "protected battery and panel connectors, and a communications/debug port. Choose the exact MPPT power topology"
+    },
+    {
+      "aspect": "MPPT topology and controller",
+      "value": "Explicitly delegated to the design agent by the brief",
+      "brief_evidence": "Choose the exact MPPT power topology and controller implementation."
+    },
+    {
+      "aspect": "Areas the benchmark should stress",
+      "value": "High-current routing, analog current sensing, switching-loop layout, thermal management, placement around bulky connectors/inductors",
+      "brief_evidence": "The benchmark should stress high-current routing, analog current sensing, switching-loop layout, thermal management, and placement around bulky connectors/inductors."
     }
   ],
   "open_decisions": [
